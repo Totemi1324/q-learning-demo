@@ -1,0 +1,8 @@
+# Vorlagen
+
+vorlage/
+
+# Krita project files
+
+*.kra
+*.kra~
