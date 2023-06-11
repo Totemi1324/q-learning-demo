@@ -36,6 +36,7 @@ const RENDER_PRORITY = [env];
 
 // --- MAIN ---
 export function main() {
+    //TODO: Create global update function to draw arrows
     return RENDER_PRORITY;
 }
 

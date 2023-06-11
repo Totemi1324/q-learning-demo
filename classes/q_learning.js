@@ -18,7 +18,7 @@ class QLearning {
         const qTableRow = this.qTable[stateNumber];
         var actionNumber;
 
-        if (everyElementIsEqual(qTableRow) || Math.random() < this.epsilon) {
+        if (everyElementIsEqual(qTableRow) || Math.random() < this.epsilon) { //TODO: Decrease epsilon
             actionNumber = randomInt(this.numActions);
         } else {
             actionNumber = positionOfMaximum(qTableRow);
