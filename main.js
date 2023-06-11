@@ -11,10 +11,25 @@ canvas.height = CANVAS_WIDTH;
 
 // Objects
 const env = new FrozenLakeEnvironment(context, {
-    x: 50,
-    y: 50,
     levelNumber: 0,
 });
+
+// Register events
+canvas.onmousedown = function (args) {
+    var mousePos = getMousePosition(
+        this.getBoundingClientRect(),
+        args.clientX,
+        args.clientY
+    );
+    env.onMouseClick(mousePos);
+};
+
+function getMousePosition(clientRect, clientX, clientY) {
+    return {
+        x: clientX - clientRect.left,
+        y: clientY - clientRect.top,
+    };
+}
 
 // Define rendering order (layers)
 const RENDER_PRORITY = [env];

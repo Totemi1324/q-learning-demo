@@ -1,6 +1,9 @@
 import { LEVELS } from "../levels.js";
 import { ASSETS } from "../assets.js";
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../main.js";
+import { ActionType } from "../shared/actions.js";
+
+import { rectContainsPoint } from "../shared/rect_contains_point.js";
 
 const TileType = Object.freeze({
     Default: Symbol(0),
@@ -43,6 +46,10 @@ class FrozenLakeEnvironment {
             x: undefined,
             y: undefined,
         };
+        this.startPosition = {
+            x: undefined,
+            y: undefined,
+        };
         this.finishPosition = {
             x: undefined,
             y: undefined,
@@ -79,10 +86,12 @@ class FrozenLakeEnvironment {
 
     loadLevel(levelNumber) {
         try {
-            this.initializeAgent(levelNumber);
             let levelObject = LEVELS.levels[levelNumber];
             this.rows = levelObject.width;
             this.columns = levelObject.height;
+            this.startPosition.x = levelObject.startPosition[0];
+            this.startPosition.y = levelObject.startPosition[1];
+            this.resetAgent(levelNumber);
             this.finishPosition.x = levelObject.finishPosition[0];
             this.finishPosition.y = levelObject.finishPosition[1];
             let holePositions = levelObject.holePositions;
@@ -104,14 +113,62 @@ class FrozenLakeEnvironment {
         }
     }
 
-    initializeAgent(levelNumber) {
-        let positionIndex = randomInt(
-            LEVELS.levels[levelNumber].startPositions.length
-        );
-        let startPosition =
-            LEVELS.levels[levelNumber].startPositions[positionIndex];
-        this.agentPosition.x = startPosition[0];
-        this.agentPosition.y = startPosition[1];
+    resetAgent() {
+        this.agentPosition.x = this.startPosition.x;
+        this.agentPosition.y = this.startPosition.y;
+    }
+
+    // Actions
+    makeAction(actionType) {
+        if (
+            this.agentPosition.x === this.finishPosition.x &&
+            this.agentPosition.y === this.finishPosition.y
+            //TODO: Reset agent in holes
+        ) {
+            this.resetAgent();
+            this.newEpoch = true;
+            this.epochs += 1;
+        }
+
+        switch (actionType) {
+            case ActionType.Up:
+                this.goUp();
+                break;
+            case ActionType.Down:
+                this.goDown();
+                break;
+            case ActionType.Left:
+                this.goLeft();
+                break;
+            case ActionType.Right:
+                this.goRight();
+                break;
+        }
+        this.newEpoch = false;
+    }
+
+    goUp() {
+        if (this.agentPosition.y != 0) {
+            this.agentPosition.y -= 1;
+        }
+    }
+
+    goDown() {
+        if (this.agentPosition.y < this.rows - 1) {
+            this.agentPosition.y += 1;
+        }
+    }
+
+    goLeft() {
+        if (this.agentPosition.x != 0) {
+            this.agentPosition.x -= 1;
+        }
+    }
+
+    goRight() {
+        if (this.agentPosition.x < this.columns - 1) {
+            this.agentPosition.x += 1;
+        }
     }
 
     // Utilities
@@ -124,6 +181,13 @@ class FrozenLakeEnvironment {
 
     coordinateToStateNumber(x, y) {
         return y * this.columns + x;
+    }
+
+    stateNumberToCoordinate(stateNum) {
+        return {
+            x: stateNum % this.columns,
+            y: Math.floor(stateNum / this.columns),
+        };
     }
 
     getTileType(x, y) {
@@ -163,13 +227,70 @@ class FrozenLakeEnvironment {
         return this.getTileType(x, y);
     }
 
-    // Events
+    getCellForPosition(position) {
+        if (
+            !rectContainsPoint(
+                this.position.x,
+                this.position.y,
+                this.columns * CellSize,
+                this.rows * CellSize,
+                position
+            )
+        ) {
+            return;
+        }
+
+        return {
+            x: Math.floor((position.x - this.position.x) / CellSize),
+            y: Math.floor((position.y - this.position.y) / CellSize),
+        };
+    }
+
+    // Event handlers
+    onMouseClick(mousePosition) {
+        const cellPosition = this.getCellForPosition(mousePosition);
+
+        if (!cellPosition) return;
+
+        switch (this.getTileState(cellPosition.x, cellPosition.y)) {
+            case TileType.Hole:
+                return;
+            case TileType.Reward:
+                this.setTileType(
+                    cellPosition.x,
+                    cellPosition.y,
+                    TileType.Default
+                );
+                break;
+            case TileType.Default:
+                if (
+                    cellPosition.x === this.startPosition.x &&
+                    cellPosition.y === this.startPosition.y
+                ) {
+                    return;
+                }
+                if (
+                    cellPosition.x === this.finishPosition.x &&
+                    cellPosition.y === this.finishPosition.y
+                ) {
+                    return;
+                }
+                this.setTileType(
+                    cellPosition.x,
+                    cellPosition.y,
+                    TileType.Reward
+                );
+                break;
+        }
+    }
+
+    // Lifecycle events
     draw() {
         for (var i = 0; i < this.rows; i++) {
             for (var j = 0; j < this.columns; j++) {
-                let x = this.position.x + j * CellSize;
-                let y = this.position.y + i * CellSize;
-                let tileState = this.getTileState(j, i);
+                const x = this.position.x + j * CellSize;
+                const y = this.position.y + i * CellSize;
+                const tileState = this.getTileState(j, i);
 
                 var sprite;
                 switch (tileState) {
@@ -201,7 +322,3 @@ class FrozenLakeEnvironment {
 }
 
 export default FrozenLakeEnvironment;
-
-function randomInt(max) {
-    return Math.floor(Math.random() * max);
-}
