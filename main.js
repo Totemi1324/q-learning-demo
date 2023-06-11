@@ -1,4 +1,4 @@
-import Rectangle from "./classes/rectangle.js";
+import FrozenLakeEnvironment from "./classes/frozen_lake_environment.js";
 
 // Global constants
 const canvas = document.getElementById("game-canvas");
@@ -7,10 +7,10 @@ canvas.width = 650;
 canvas.height = 650;
 
 // Objects
-const rect = new Rectangle(context);
+const env = new FrozenLakeEnvironment(context, 0);
 
 // Define rendering order (layers)
-const RENDER_PRORITY = [rect];
+const RENDER_PRORITY = [env];
 
 // --- MAIN ---
 export function main() {

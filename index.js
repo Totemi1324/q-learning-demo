@@ -4,11 +4,11 @@
 
 import { main, clear } from "./main.js";
 
-const defaultFrameRate = 64;
+const defaultFrameRate = 5;
 var fpsInterval, now, then, elapsed;
 
 // Set framerate
-function setFramesPerSecond(fps) {
+export function setFramesPerSecond(fps) {
     fpsInterval = 1000 / fps;
     then = window.performance.now();
 }
