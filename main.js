@@ -1,13 +1,20 @@
 import FrozenLakeEnvironment from "./classes/frozen_lake_environment.js";
 
 // Global constants
+export const CANVAS_WIDTH = 650;
+export const CANVAS_HEIGHT = 650;
+
 const canvas = document.getElementById("game-canvas");
 const context = canvas.getContext("2d");
-canvas.width = 650;
-canvas.height = 650;
+canvas.width = CANVAS_WIDTH;
+canvas.height = CANVAS_WIDTH;
 
 // Objects
-const env = new FrozenLakeEnvironment(context, 0);
+const env = new FrozenLakeEnvironment(context, {
+    x: 50,
+    y: 50,
+    levelNumber: 0,
+});
 
 // Define rendering order (layers)
 const RENDER_PRORITY = [env];
