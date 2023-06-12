@@ -14,6 +14,9 @@ const context = canvas.getContext("2d");
 canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_WIDTH;
 
+// Global settings
+export let paused = false;
+
 // Objects
 const env = new FrozenLakeEnvironment(context, {
     levelNumber: 0,
@@ -46,7 +49,11 @@ function getMousePosition(clientRect, clientX, clientY) {
     };
 }
 
+document.getElementById("pause-button").onclick = togglePause;
 
+function togglePause() {
+    paused = !paused;
+}
 
 // Define rendering order (layers)
 const RENDER_PRIORITY = [env, qLearning];

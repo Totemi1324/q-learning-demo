@@ -1,4 +1,5 @@
 import { ActionType } from "../shared/actions.js";
+import { paused } from "../main.js";
 
 import { createMatrix } from "../shared/create_matrix.js";
 import { positionOfMaximum } from "../shared/position_of_maximum.js";
@@ -53,6 +54,9 @@ class QLearning {
 
     // Lifecycle events
     update() {
+        if (paused) {
+            return;
+        }
         const stateNumber = this.environment.currentStateNumber();
         const actionNumber = this.chooseAction(stateNumber);
         this.environment.makeAction(this.actionNumberToType(actionNumber));

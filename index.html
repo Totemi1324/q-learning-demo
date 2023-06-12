@@ -14,6 +14,53 @@
         <h1 id="main-title">Q-Learning</h1>
         <hr>
         <p id="main-paragraph">Das Frozen Lake-Game</p>
+        <div id="settings">
+            <button id="pause-button" class="settings-button">Pause / Resume</button>
+            <button id="reset-button" class="settings-button">Reset Q-Learning</button>
+            <button id="turbo-button" class="settings-button">500 Steps</button>
+            <button id="remove-button" class="settings-button">Remove all stars</button>
+            <div class="labeled-setting">
+                <p>&gamma;</p>
+                <select name="gamma-values" id="gamma-selector">
+                    <option value="0">0</option>
+                    <option value="0.1">0.1</option>
+                    <option value="0.5">0.5</option>
+                    <option value="0.9" selected="selected">0.9</option>
+                    <option value="1">1</option>
+                </select>
+            </div>
+            <div class="labeled-setting">
+                <p>&epsilon;</p>
+                <select name="epsilon-values" id="epsilon-selector">
+                    <option value="0">0</option>
+                    <option value="0.05">0.05</option>
+                    <option value="0.1" selected="selected">0.1</option>
+                    <option value="0.2">0.2</option>
+                    <option value="0.5">0.5</option>
+                    <option value="0.9">0.9</option>
+                    <option value="1">1</option>
+                </select>
+            </div>
+            <div class="labeled-setting">
+                <p>Steps</p>
+                <input type="text" id="steps-field" readonly>
+            </div>
+            <div class="labeled-setting">
+                <p>Epoch</p>
+                <input type="text" id="epochs-field" readonly>
+            </div>
+            <div class="labeled-setting">
+                <p>Steps / second</p>
+                <select name="fps-values" id="fps-selector">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="4">4</option>
+                    <option value="8" selected="selected">8</option>
+                    <option value="16">16</option>
+                    <option value="32">32</option>
+                </select>
+            </div>
+        </div>
         <div id="game-div">
             <div id="inner-game-div">
                 <canvas id="game-canvas"></canvas>

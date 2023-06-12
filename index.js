@@ -4,7 +4,7 @@
 
 import { main, post, clear } from "./main.js";
 
-const defaultFrameRate = 15;
+const defaultFrameRate = 8;
 var fpsInterval, now, then, elapsed;
 
 // Set framerate
