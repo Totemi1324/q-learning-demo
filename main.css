@@ -63,7 +63,7 @@ footer {
     margin: 20px 100px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
     grid-column-gap: 10px;
     grid-row-gap: 20px; 
 }
@@ -85,7 +85,11 @@ footer {
     box-shadow: 5px 5px 14px 0px rgba(0,0,0,0.36);
 }
 
-.labeled-setting {
+.level-selector {
+    grid-column-start: 1;
+    grid-column-end: 5;
+}
+.labeled-setting, .level-selector {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -131,6 +135,12 @@ option {
 #reset-button {
     grid-column-start: 3;
     grid-column-end: 5;
+}
+
+#level-label {
+    font-family: 'Abel', 'sans-serif';
+    color: rgb(204, 234, 141);
+    font-size: 1.7em;
 }
 
 #game-div {
