@@ -221,7 +221,7 @@ class FrozenLakeEnvironment {
             case TileType.Hole:
                 return -1000;
             case TileType.Reward:
-                return 10;
+                return 1;
             default:
                 return 0;
         }

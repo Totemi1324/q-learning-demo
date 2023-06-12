@@ -87,6 +87,8 @@ function incrementLevel() {
     level = (level + 1) % 4;
     env.initialize(level);
     qLearning.resetMemory();
+    var levelLabel = document.getElementById("level-label");
+    levelLabel.innerText = "Level " + (level + 1).toString();
 }
 function decrementLevel() {
     level -= 1;
@@ -95,6 +97,8 @@ function decrementLevel() {
     }
     env.initialize(level);
     qLearning.resetMemory();
+    var levelLabel = document.getElementById("level-label");
+    levelLabel.innerText = "Level " + (level + 1).toString();
 }
 
 function selectGamma() {
