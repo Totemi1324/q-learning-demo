@@ -40,6 +40,10 @@ main {
     width: 1280px;
 }
 
+footer {
+    height: 50px;
+}
+
 #main-title {
     margin: 30px 0;
     font-family: 'UnicaOne', 'sans-serif';
