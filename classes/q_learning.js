@@ -14,8 +14,12 @@ class QLearning {
         this.numSteps = 0;
     }
 
+    getQForState(stateNumber) {
+        return this.qTable[stateNumber];
+    }
+
     chooseAction(stateNumber) {
-        const qTableRow = this.qTable[stateNumber];
+        const qTableRow = this.getQForState(stateNumber);
         var actionNumber;
 
         if (everyElementIsEqual(qTableRow) || Math.random() < this.epsilon) { //TODO: Decrease epsilon

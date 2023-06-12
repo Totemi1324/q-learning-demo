@@ -1,6 +1,6 @@
 import { LEVELS } from "../levels.js";
 import { ASSETS } from "../assets.js";
-import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../main.js";
+import { CANVAS_WIDTH, CANVAS_HEIGHT, CELL_SIZE } from "../main.js";
 import { ActionType } from "../shared/actions.js";
 
 import { rectContainsPoint } from "../shared/rect_contains_point.js";
@@ -12,8 +12,6 @@ const TileType = Object.freeze({
     Agent: Symbol(3),
     Finish: Symbol(4),
 });
-
-const CellSize = 64;
 
 class FrozenLakeEnvironment {
     constructor(context, { levelNumber }) {
@@ -36,10 +34,6 @@ class FrozenLakeEnvironment {
             reward: undefined,
             agent: undefined,
             finish: undefined,
-            arrowUp: undefined,
-            arrowDown: undefined,
-            arrowLeft: undefined,
-            arrowRight: undefined,
         };
 
         this.agentPosition = {
@@ -80,8 +74,8 @@ class FrozenLakeEnvironment {
         this.loadLevel(levelNumber);
 
         this.numStates = this.rows * this.columns;
-        this.position.x = CANVAS_WIDTH / 2 - (this.columns / 2) * CellSize;
-        this.position.y = CANVAS_HEIGHT / 2 - (this.rows / 2) * CellSize;
+        this.position.x = CANVAS_WIDTH / 2 - (this.columns / 2) * CELL_SIZE;
+        this.position.y = CANVAS_HEIGHT / 2 - (this.rows / 2) * CELL_SIZE;
     }
 
     loadLevel(levelNumber) {
@@ -114,14 +108,12 @@ class FrozenLakeEnvironment {
     }
 
     resetAgent() {
-        console.log("Agent reset");
         this.agentPosition.x = this.startPosition.x;
         this.agentPosition.y = this.startPosition.y;
     }
 
     // Actions
     makeAction(actionType) {
-        console.log("Make action");
         if (
             (this.agentPosition.x === this.finishPosition.x &&
             this.agentPosition.y === this.finishPosition.y) ||
@@ -201,6 +193,11 @@ class FrozenLakeEnvironment {
         this.tiles.set(this.coordinateToStateNumber(x, y), tileType);
     }
 
+    isHoleTile(x, y) {
+        const type = this.getTileType(x, y)
+        return type == TileType.Hole;
+    }
+
     getReward() {
         if (
             this.agentPosition.x == this.finishPosition.x &&
@@ -235,8 +232,8 @@ class FrozenLakeEnvironment {
             !rectContainsPoint(
                 this.position.x,
                 this.position.y,
-                this.columns * CellSize,
-                this.rows * CellSize,
+                this.columns * CELL_SIZE,
+                this.rows * CELL_SIZE,
                 position
             )
         ) {
@@ -244,8 +241,8 @@ class FrozenLakeEnvironment {
         }
 
         return {
-            x: Math.floor((position.x - this.position.x) / CellSize),
-            y: Math.floor((position.y - this.position.y) / CellSize),
+            x: Math.floor((position.x - this.position.x) / CELL_SIZE),
+            y: Math.floor((position.y - this.position.y) / CELL_SIZE),
         };
     }
 
@@ -291,8 +288,8 @@ class FrozenLakeEnvironment {
     draw() {
         for (var i = 0; i < this.rows; i++) {
             for (var j = 0; j < this.columns; j++) {
-                const x = this.position.x + j * CellSize;
-                const y = this.position.y + i * CellSize;
+                const x = this.position.x + j * CELL_SIZE;
+                const y = this.position.y + i * CELL_SIZE;
                 const tileState = this.getTileState(j, i);
 
                 var sprite;
@@ -314,7 +311,7 @@ class FrozenLakeEnvironment {
                         break;
                 }
 
-                this.context.drawImage(sprite, x, y, CellSize, CellSize);
+                this.context.drawImage(sprite, x, y, CELL_SIZE, CELL_SIZE);
             }
         }
     }

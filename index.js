@@ -2,9 +2,9 @@
 // (c) Tamas Nemes, 2022
 // DO NOT TOUCH THIS FILE!
 
-import { main, clear } from "./main.js";
+import { main, post, clear } from "./main.js";
 
-const defaultFrameRate = 5;
+const defaultFrameRate = 15;
 var fpsInterval, now, then, elapsed;
 
 // Set framerate
@@ -21,6 +21,7 @@ function update() {
             instance.update();
         }
     });
+    post();
 }
 
 // App structure
