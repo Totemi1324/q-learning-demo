@@ -1,5 +1,6 @@
 import FrozenLakeEnvironment from "./classes/frozen_lake_environment.js";
 import QLearning from "./classes/q_learning.js";
+import { setFramesPerSecond } from "./index.js";
 
 import { ASSETS } from "./assets.js";
 import { positionOfMaximum } from "./shared/position_of_maximum.js";
@@ -54,6 +55,13 @@ function getMousePosition(clientRect, clientX, clientY) {
 document.getElementById("pause-button").onclick = togglePause;
 document.getElementById("reset-button").onclick = resetQLearning;
 document.getElementById("turbo-button").onclick = make500Steps;
+document.getElementById("remove-button").onclick = removeAllStars;
+const gammaSelector = document.getElementById("gamma-selector");
+gammaSelector.onchange = selectGamma;
+const epsilonSelector = document.getElementById("epsilon-selector");
+epsilonSelector.onchange = selectEpsilon;
+const fpsSelector = document.getElementById("fps-selector");
+fpsSelector.onchange = setFramerate;
 
 function togglePause() {
     paused = !paused;
@@ -68,6 +76,22 @@ function make500Steps() {
     for (var i = 0; i < 500; i++) {
         qLearning.update(false);
     }
+}
+function removeAllStars() {
+    env.resetTilesToDefault();
+}
+
+function selectGamma() {
+    var newGamma = parseFloat(gammaSelector.value);
+    qLearning.gamma = newGamma;
+}
+function selectEpsilon() {
+    var newEpsilon = parseFloat(epsilonSelector.value);
+    qLearning.epsilon = newEpsilon;
+}
+function setFramerate() {
+    var newFramerate = parseInt(fpsSelector.value);
+    setFramesPerSecond(newFramerate);
 }
 
 // Define rendering order (layers)

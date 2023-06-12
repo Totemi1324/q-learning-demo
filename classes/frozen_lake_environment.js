@@ -112,6 +112,14 @@ class FrozenLakeEnvironment {
         this.agentPosition.y = this.startPosition.y;
     }
 
+    resetTilesToDefault() {
+        for (let [stateNum, tileType] of this.tiles) {
+            if (tileType == TileType.Reward) {
+                this.tiles.set(stateNum, TileType.Default);
+            }
+        }
+    }
+
     // Actions
     makeAction(actionType) {
         if (
