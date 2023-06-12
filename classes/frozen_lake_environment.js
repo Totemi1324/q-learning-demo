@@ -50,6 +50,7 @@ class FrozenLakeEnvironment {
         };
         this.tiles = undefined;
 
+        this.loadAssets();
         this.initialize(levelNumber);
     }
 
@@ -60,6 +61,14 @@ class FrozenLakeEnvironment {
         this.newEpoch = true;
         this.tiles = new Map();
 
+        this.loadLevel(levelNumber);
+
+        this.numStates = this.rows * this.columns;
+        this.position.x = CANVAS_WIDTH / 2 - (this.columns / 2) * CELL_SIZE;
+        this.position.y = CANVAS_HEIGHT / 2 - (this.rows / 2) * CELL_SIZE;
+    }
+
+    loadAssets() {
         this.sprites.agent = new Image();
         this.sprites.agent.src = ASSETS.agent;
         this.sprites.finish = new Image();
@@ -70,19 +79,13 @@ class FrozenLakeEnvironment {
         this.sprites.hole.src = ASSETS.hole;
         this.sprites.reward = new Image();
         this.sprites.reward.src = ASSETS.reward;
-
-        this.loadLevel(levelNumber);
-
-        this.numStates = this.rows * this.columns;
-        this.position.x = CANVAS_WIDTH / 2 - (this.columns / 2) * CELL_SIZE;
-        this.position.y = CANVAS_HEIGHT / 2 - (this.rows / 2) * CELL_SIZE;
     }
 
     loadLevel(levelNumber) {
         try {
             let levelObject = LEVELS.levels[levelNumber];
-            this.rows = levelObject.width;
-            this.columns = levelObject.height;
+            this.rows = levelObject.height;
+            this.columns = levelObject.width;
             this.startPosition.x = levelObject.startPosition[0];
             this.startPosition.y = levelObject.startPosition[1];
             this.resetAgent(levelNumber);

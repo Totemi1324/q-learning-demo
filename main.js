@@ -16,13 +16,14 @@ canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_WIDTH;
 
 // Global settings
+export let level = 0;
 export let paused = false;
 export let stepsField = document.getElementById("steps-field");
 export let epochsField = document.getElementById("epochs-field");
 
 // Objects
 const env = new FrozenLakeEnvironment(context, {
-    levelNumber: 0,
+    levelNumber: level,
 });
 const qLearning = new QLearning(env, {
     gamma: 0.9,
@@ -56,6 +57,8 @@ document.getElementById("pause-button").onclick = togglePause;
 document.getElementById("reset-button").onclick = resetQLearning;
 document.getElementById("turbo-button").onclick = make500Steps;
 document.getElementById("remove-button").onclick = removeAllStars;
+document.getElementById("next-level-button").onclick = incrementLevel;
+document.getElementById("previous-level-button").onclick = decrementLevel;
 const gammaSelector = document.getElementById("gamma-selector");
 gammaSelector.onchange = selectGamma;
 const epsilonSelector = document.getElementById("epsilon-selector");
@@ -80,14 +83,27 @@ function make500Steps() {
 function removeAllStars() {
     env.resetTilesToDefault();
 }
+function incrementLevel() {
+    level = (level + 1) % 4;
+    env.initialize(level);
+    qLearning.resetMemory();
+}
+function decrementLevel() {
+    level -= 1;
+    if (level < 0) {
+        level = 3;
+    }
+    env.initialize(level);
+    qLearning.resetMemory();
+}
 
 function selectGamma() {
     var newGamma = parseFloat(gammaSelector.value);
-    qLearning.gamma = newGamma;
+    qLearning.setConstants(newGamma, qLearning.epsilon);
 }
 function selectEpsilon() {
     var newEpsilon = parseFloat(epsilonSelector.value);
-    qLearning.epsilon = newEpsilon;
+    qLearning.setConstants(qLearning.gamma, newEpsilon);
 }
 function setFramerate() {
     var newFramerate = parseInt(fpsSelector.value);
