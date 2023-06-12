@@ -16,6 +16,8 @@ canvas.height = CANVAS_WIDTH;
 
 // Global settings
 export let paused = false;
+export let stepsField = document.getElementById("steps-field");
+export let epochsField = document.getElementById("epochs-field");
 
 // Objects
 const env = new FrozenLakeEnvironment(context, {
@@ -50,9 +52,22 @@ function getMousePosition(clientRect, clientX, clientY) {
 }
 
 document.getElementById("pause-button").onclick = togglePause;
+document.getElementById("reset-button").onclick = resetQLearning;
+document.getElementById("turbo-button").onclick = make500Steps;
 
 function togglePause() {
     paused = !paused;
+}
+function resetQLearning() {
+    stepsField.value = "0";
+    qLearning.resetMemory();
+    env.resetAgent();
+    env.epochs = 0;
+}
+function make500Steps() {
+    for (var i = 0; i < 500; i++) {
+        qLearning.update(false);
+    }
 }
 
 // Define rendering order (layers)

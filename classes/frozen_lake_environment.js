@@ -1,6 +1,6 @@
 import { LEVELS } from "../levels.js";
 import { ASSETS } from "../assets.js";
-import { CANVAS_WIDTH, CANVAS_HEIGHT, CELL_SIZE } from "../main.js";
+import { CANVAS_WIDTH, CANVAS_HEIGHT, CELL_SIZE, epochsField } from "../main.js";
 import { ActionType } from "../shared/actions.js";
 
 import { rectContainsPoint } from "../shared/rect_contains_point.js";
@@ -318,6 +318,7 @@ class FrozenLakeEnvironment {
 
     update() {
         this.draw();
+        epochsField.value = this.epochs.toString();
     }
 }
 

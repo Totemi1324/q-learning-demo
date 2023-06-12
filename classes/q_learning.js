@@ -1,5 +1,5 @@
 import { ActionType } from "../shared/actions.js";
-import { paused } from "../main.js";
+import { paused, stepsField } from "../main.js";
 
 import { createMatrix } from "../shared/create_matrix.js";
 import { positionOfMaximum } from "../shared/position_of_maximum.js";
@@ -8,8 +8,26 @@ import { randomInt } from "../shared/random_int.js";
 class QLearning {
     constructor(environment, {gamma, epsilon}) {
         this.environment = environment;
+        this.gamma = undefined;
+        this.epsilon = undefined;
+        this.numActions = undefined;
+        this.qTable = undefined;
+        this.numSteps = undefined;
+
+        this.initialize(gamma, epsilon);
+    }
+
+    initialize(gamma, epsilon) {
+        this.setConstants(gamma, epsilon);
+        this.resetMemory();
+    }
+
+    setConstants(gamma, epsilon) {
         this.gamma = gamma;
         this.epsilon = epsilon;
+    }
+
+    resetMemory() {
         this.numActions = this.environment.numActions;
         this.qTable = createMatrix(this.environment.numStates, this.numActions, 0);
         this.numSteps = 0;
@@ -53,10 +71,12 @@ class QLearning {
     }
 
     // Lifecycle events
-    update() {
-        if (paused) {
+    update(pauseAllowed = true) {
+        if (paused && pauseAllowed) {
             return;
         }
+
+        stepsField.value = this.numSteps.toString();
         const stateNumber = this.environment.currentStateNumber();
         const actionNumber = this.chooseAction(stateNumber);
         this.environment.makeAction(this.actionNumberToType(actionNumber));

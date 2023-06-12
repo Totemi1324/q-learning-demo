@@ -100,6 +100,7 @@ main {
     font-family: 'Abel', 'sans-serif';
     color: white;
     font-size: 1em;
+    padding: 10px;
 }
 .labeled-setting > select {
     height: 50px;
