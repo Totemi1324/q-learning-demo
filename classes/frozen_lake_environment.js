@@ -114,20 +114,23 @@ class FrozenLakeEnvironment {
     }
 
     resetAgent() {
+        console.log("Agent reset");
         this.agentPosition.x = this.startPosition.x;
         this.agentPosition.y = this.startPosition.y;
     }
 
     // Actions
     makeAction(actionType) {
+        console.log("Make action");
         if (
-            this.agentPosition.x === this.finishPosition.x &&
-            this.agentPosition.y === this.finishPosition.y
-            //TODO: Reset agent in holes
+            (this.agentPosition.x === this.finishPosition.x &&
+            this.agentPosition.y === this.finishPosition.y) ||
+            this.getTileType(this.agentPosition.x, this.agentPosition.y) == TileType.Hole
         ) {
             this.resetAgent();
             this.newEpoch = true;
             this.epochs += 1;
+            return;
         }
 
         switch (actionType) {

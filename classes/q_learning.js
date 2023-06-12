@@ -2,15 +2,15 @@ import { ActionType } from "../shared/actions.js";
 
 import { createMatrix } from "../shared/create_matrix.js";
 import { positionOfMaximum } from "../shared/position_of_maximum.js";
+import { randomInt } from "../shared/random_int.js";
 
 class QLearning {
-    constructor(environment) {
+    constructor(environment, {gamma, epsilon}) {
         this.environment = environment;
-        this.gamma = 0.9;
-        this.epsilon = 0.1;
-        this.alpha = 1;
+        this.gamma = gamma;
+        this.epsilon = epsilon;
         this.numActions = this.environment.numActions;
-        this.qTable = createMatrix(umwelt.numStates, this.numActions, 0);
+        this.qTable = createMatrix(this.environment.numStates, this.numActions, 0);
         this.numSteps = 0;
     }
 
@@ -42,7 +42,7 @@ class QLearning {
 
     updateQ(stateNumber, actionNumber, followingStateNumber, reward) {
         const qTableRowOfFollowingState = this.qTable[followingStateNumber];
-        const maxQ = Math.max(qTableRowOfFollowingState);
+        const maxQ = Math.max(...qTableRowOfFollowingState);
         const qNew = reward + this.gamma * maxQ;
         this.qTable[stateNumber][actionNumber] = qNew;
     }
@@ -67,15 +67,8 @@ class QLearning {
     }
 }
 
+export default QLearning;
+
 function everyElementIsEqual(array) {
     return array.every((v) => v === array[0]);
-}
-
-function randomInt(maximum) {
-    const r = Math.floor(Math.random() * maximum);
-    if (r == maximum) {
-        return maximum - 1;
-    } else {
-        return r;
-    }
 }

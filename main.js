@@ -1,4 +1,5 @@
 import FrozenLakeEnvironment from "./classes/frozen_lake_environment.js";
+import QLearning from "./classes/q_learning.js";
 
 // Global constants
 export const CANVAS_WIDTH = 650;
@@ -12,6 +13,10 @@ canvas.height = CANVAS_WIDTH;
 // Objects
 const env = new FrozenLakeEnvironment(context, {
     levelNumber: 0,
+});
+const qLearning = new QLearning(env, {
+    gamma: 0.9,
+    epsilon: 0.1,
 });
 
 // Register events
@@ -32,12 +37,12 @@ function getMousePosition(clientRect, clientX, clientY) {
 }
 
 // Define rendering order (layers)
-const RENDER_PRORITY = [env];
+const RENDER_PRIORITY = [env, qLearning];
 
 // --- MAIN ---
 export function main() {
     //TODO: Create global update function to draw arrows
-    return RENDER_PRORITY;
+    return RENDER_PRIORITY;
 }
 
 // --- CLEAR CANVAS ---
