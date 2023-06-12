@@ -6,8 +6,8 @@ import { ASSETS } from "./assets.js";
 import { positionOfMaximum } from "./shared/position_of_maximum.js";
 
 // Global constants
-export const CANVAS_WIDTH = 650;
-export const CANVAS_HEIGHT = 650;
+export const CANVAS_WIDTH = 720;
+export const CANVAS_HEIGHT = 720;
 export const CELL_SIZE = 64;
 
 const canvas = document.getElementById("game-canvas");
